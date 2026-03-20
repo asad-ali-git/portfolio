@@ -1,0 +1,6 @@
+[
+  {
+    "type": "sqlite",
+    "path": "/var/www/html/General/portfolio/backend/database/database.sqlite"
+  }
+]
