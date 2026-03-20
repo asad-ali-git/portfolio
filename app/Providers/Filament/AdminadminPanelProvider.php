@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Closure;
 
 class AdminadminPanelProvider extends PanelProvider
 {
@@ -31,10 +32,6 @@ class AdminadminPanelProvider extends PanelProvider
                 'primary' => Color::Violet,
             ])
             ->brandName('Portfolio Admin')
-            ->authorizationMiddleware(static function ($request, $next) {
-                // Allow any authenticated user to access the panel
-                return $next($request);
-            })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -54,6 +51,7 @@ class AdminadminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                static fn (object $request, Closure $next) => $next($request),
             ])
             ->authMiddleware([
                 Authenticate::class,
