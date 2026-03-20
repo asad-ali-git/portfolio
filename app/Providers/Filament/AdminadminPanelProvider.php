@@ -31,6 +31,10 @@ class AdminadminPanelProvider extends PanelProvider
                 'primary' => Color::Violet,
             ])
             ->brandName('Portfolio Admin')
+            ->authorizationMiddleware(static function ($request, $next) {
+                // Allow any authenticated user to access the panel
+                return $next($request);
+            })
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
