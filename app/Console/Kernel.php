@@ -13,7 +13,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // Send reminders for unread contact messages every hour
-        $schedule->command('contact-messages:send-reminders')->hourly();
+        // $schedule->command('contact-messages:send-reminders')->hourly();
+        $schedule->command('contact-messages:send-reminders')
+                ->everyMinute()
+                ->appendOutputTo(storage_path('logs/scheduler.log'));
     }
 
     /**
