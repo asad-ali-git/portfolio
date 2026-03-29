@@ -37,6 +37,7 @@ class ContactMessageReceived extends Mailable
     {
         return new Content(
             view: 'emails.contact-message-received',
+            text: 'emails.contact-message-received-text',
             with: [
                 'contactMessage' => $this->message,
             ],
