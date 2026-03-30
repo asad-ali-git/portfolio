@@ -33,22 +33,46 @@ Route::get('/clear', function () {
 });
 
 Route::get('/fix-permissions', function () {
-    $commands = [
-        'chmod -R 775 ' . escapeshellarg(storage_path()),
-        'chmod -R 775 ' . escapeshellarg(base_path('bootstrap/cache')),
+    $targets = [
+        storage_path(),
+        base_path('bootstrap/cache'),
     ];
 
+    $mode = 0775;
     $result = [];
 
-    foreach ($commands as $command) {
-        $output = [];
-        $exitCode = 0;
+    foreach ($targets as $target) {
+        $processed = 0;
+        $failed = 0;
 
-        exec($command . ' 2>&1', $output, $exitCode);
+        if (!is_dir($target)) {
+            $result[] = 'Target not found: ' . $target;
+            $result[] = str_repeat('-', 40);
+            continue;
+        }
 
-        $result[] = '$ ' . $command;
-        $result[] = 'exit code: ' . $exitCode;
-        $result[] = empty($output) ? '(no output)' : implode(PHP_EOL, $output);
+        $items = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($target, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        if (!chmod($target, $mode)) {
+            $failed++;
+        }
+        $processed++;
+
+        foreach ($items as $item) {
+            if (!chmod($item->getPathname(), $mode)) {
+                $failed++;
+            }
+            $processed++;
+        }
+
+        $result[] = 'Target: ' . $target;
+        $result[] = 'Mode: 0775';
+        $result[] = 'Processed: ' . $processed;
+        $result[] = 'Failed: ' . $failed;
+        $result[] = $failed === 0 ? 'Status: OK' : 'Status: Completed with errors';
         $result[] = str_repeat('-', 40);
     }
 
