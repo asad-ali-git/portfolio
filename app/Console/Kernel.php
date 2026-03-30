@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        Log::info('Scheduler is running...');
+        $schedule->call(function () {
+            Log::info('Scheduler is running at ' . now());
+        })->everyMinute();
         // Send reminders for unread contact messages every hour
         // $schedule->command('contact-messages:send-reminders')->hourly();
         $schedule->command('inspire')->everyFiveSeconds();
