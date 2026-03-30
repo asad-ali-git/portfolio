@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,6 +13,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        Log::info('Scheduler is running...');
         // Send reminders for unread contact messages every hour
         // $schedule->command('contact-messages:send-reminders')->hourly();
         $schedule->command('contact-messages:send-reminders')
