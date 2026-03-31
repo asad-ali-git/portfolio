@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             Log::info('Scheduler is running at ' . now());
-        })->everyMinute();
+        })->everyFiveSeconds();
         // Send reminders for unread contact messages every hour
         // $schedule->command('contact-messages:send-reminders')->hourly();
         $schedule->command('inspire')->everyFiveSeconds();
