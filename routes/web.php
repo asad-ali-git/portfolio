@@ -81,10 +81,7 @@ Route::get('/fix-permissions', function () {
     ]);
 });
 
-Route::view('/{any}', 'app')
-    ->where('any', '^(?!(api|admin|filament|clear|storage|artisan|schedule-list|schedule-run|fix-permissions)$).*$');
-
-Route::get('/artisan/{command}', function ($secret, $command) {
+Route::get('/artisan/{command}', function ($command) {
 
     $allowed = [
         'optimize:clear',
@@ -110,3 +107,6 @@ Route::get('/artisan/{command}', function ($secret, $command) {
         'time'    => now()->toDateTimeString(),
     ]);
 });
+
+Route::view('/{any}', 'app')
+    ->where('any', '^(?!(api|admin|filament|clear|storage|artisan|schedule-list|schedule-run|fix-permissions)(/|$)).*');
