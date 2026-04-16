@@ -84,3 +84,29 @@ Route::get('/fix-permissions', function () {
 Route::view('/{any}', 'app')
     ->where('any', '^(?!(api|admin|filament|clear|schedule-list|schedule-run|fix-permissions)$).*$');
 
+Route::get('/artisan/{command}', function ($secret, $command) {
+
+    $allowed = [
+        'optimize:clear',
+        'config:clear',
+        'cache:clear',
+        'route:clear',
+        'view:clear',
+        'queue:restart',
+        'migrate',
+        'storage:link',
+    ];
+
+    if (!in_array($command, $allowed)) {
+        return response()->json(['error' => 'Command not allowed.'], 403);
+    }
+
+    Artisan::call($command);
+
+    return response()->json([
+        'status'  => 'success',
+        'command' => $command,
+        'output'  => Artisan::output(),
+        'time'    => now()->toDateTimeString(),
+    ]);
+});
