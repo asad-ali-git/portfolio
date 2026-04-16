@@ -82,7 +82,7 @@ Route::get('/fix-permissions', function () {
 });
 
 Route::view('/{any}', 'app')
-    ->where('any', '^(?!(api|admin|filament|clear|schedule-list|schedule-run|fix-permissions)$).*$');
+    ->where('any', '^(?!(api|admin|filament|clear|storage|artisan|schedule-list|schedule-run|fix-permissions)$).*$');
 
 Route::get('/artisan/{command}', function ($secret, $command) {
 
