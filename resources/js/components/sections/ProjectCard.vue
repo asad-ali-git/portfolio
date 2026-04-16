@@ -52,7 +52,17 @@
           Featured
         </span>
       </div>
-      <p class="text-sm text-slate-500 dark:text-ink-soft leading-relaxed mb-4 line-clamp-2">{{ project.description }}</p>
+      <p :class="['text-sm text-slate-500 dark:text-ink-soft leading-relaxed', isDescriptionExpanded ? 'mb-2' : 'mb-4 line-clamp-2']">
+        {{ project.description }}
+      </p>
+      <button
+        v-if="project.description && project.description.length > 120"
+        type="button"
+        class="mb-4 text-xs font-medium text-accent hover:text-accent-dark transition-colors"
+        @click="isDescriptionExpanded = !isDescriptionExpanded"
+      >
+        {{ isDescriptionExpanded ? 'Show less' : 'Read more' }}
+      </button>
       <div class="flex flex-wrap gap-1.5">
         <span v-for="tech in project.tech_stack?.slice(0, 6)" :key="tech" class="chip text-[11px] px-2 py-1">{{ tech }}</span>
       </div>
@@ -61,8 +71,12 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
 defineProps({
   project: { type: Object, required: true },
   featured: { type: Boolean, default: false },
 })
+
+const isDescriptionExpanded = ref(false)
 </script>
